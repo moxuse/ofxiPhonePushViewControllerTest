@@ -10,13 +10,10 @@ void testApp::setup(){
 
     ofxiPhoneAlerts.addListener(this);
     
-    subViewController = [[UIViewController alloc] init];
-    
-    subViewController.title = @"Second View Controller";
+    ofxiPhoneGetOFWindow()->enableRetina();
     
     ofSetCircleResolution(50);
 	ofBackground(255,255,255);
-	bSmooth = false;
 }
 
 //--------------------------------------------------------------
@@ -31,10 +28,10 @@ void testApp::draw(){
         UIWindow * window = ofxiPhoneGetUIWindow();
         
         UIViewController *firstViewController = ofxiPhoneGetViewController();
-        
+
         firstViewController.title = @"First View Controller";
         
-        window.rootViewController = subViewController;
+        window.rootViewController = subViewController; // 一時的にrootViewControllerを割り当てないとこける
         
         navigationController = [[UINavigationController alloc] initWithRootViewController:firstViewController];
         
@@ -74,7 +71,11 @@ void testApp::touchUp(ofTouchEventArgs & touch){
     touch window to push viewController..
     */
     
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard" bundle:nil];
+    subViewController = [storyboard instantiateViewControllerWithIdentifier:@"Second-View-Controller"];
+    
     [navigationController pushViewController:subViewController animated:YES];
+    
 }
 
 //--------------------------------------------------------------
