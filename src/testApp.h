@@ -6,10 +6,10 @@
 
 class testApp : public ofxiPhoneApp{
     
-private:
-    UIViewController *subViewController;
-    UINavigationController *navigationController;
-	
+    private:
+        UIViewController *subViewController;
+        UINavigationController *navigationController;
+        
     public:
         void setup();
         void update();

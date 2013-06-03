@@ -4,7 +4,7 @@ static dispatch_once_t onceToken;
 
 //--------------------------------------------------------------
 void testApp::setup(){
-	ofxAccelerometer.setup();
+    ofxAccelerometer.setup();
     
     ofRegisterTouchEvents(this);
 
