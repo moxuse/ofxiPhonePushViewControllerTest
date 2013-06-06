@@ -10,15 +10,31 @@ void testApp::setup(){
 
     ofxiPhoneAlerts.addListener(this);
     
-    ofxiPhoneGetOFWindow()->enableRetina();
+    //ofxiPhoneGetOFWindow()->enableRetina();
     
-    ofSetCircleResolution(50);
 	ofBackground(255,255,255);
+    
+    camera.setupPerspective();
+    camera.setFarClip(8000);
+    
+    camera.setPosition(ofVec3f( 0, 0, 1000));
+    
+    for (int i = 0; i< 1000; i++) {
+        Node newNode = Node();
+        newNode.position = ofVec3f( ofRandom(1000) - 500, ofRandom(1000) - 500, ofRandom(1000) - 500 );
+        nodes.push_back( newNode);
+    }
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-    counter = counter + 0.033f;
+
+    if ([ofxiPhoneGetViewController().glView isAnimating]) {
+        
+        counter = counter + 0.25f;
+    
+        camera.lookAt(ofVec3f(0, 0, 0));
+    }
 }
 
 //--------------------------------------------------------------
@@ -44,9 +60,25 @@ void testApp::draw(){
         
     });
     
-    
-    ofSetColor(0, 0, 0);
-    ofDrawBitmapString("This is ofxiPhoneGLView.. \nTouch and Push viewController", 10, ofGetHeight() / 2 - 50 );
+    if ([ofxiPhoneGetViewController().glView isAnimating]) {
+
+
+        camera.begin();
+        
+        ofRotateY(counter);
+        
+        ofSetColor(0, 255, 250);
+        
+        for (int i = 0; i< nodes.size(); i++ ) {
+            nodes[i].draw();
+        }
+        
+        camera.end();
+        
+        ofSetColor(0, 0, 0);
+        ofDrawBitmapString("This is ofxiPhoneGLView.. \nTouch and Push viewController", 10, ofGetHeight() / 2 - 50 );
+        
+    }
 }
 
 //--------------------------------------------------------------

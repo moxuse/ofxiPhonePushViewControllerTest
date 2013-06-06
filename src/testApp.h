@@ -3,13 +3,19 @@
 #include "ofMain.h"
 #include "ofxiPhone.h"
 #include "ofxiPhoneExtras.h"
+#include "Node.h"
 
 class testApp : public ofxiPhoneApp{
     
     private:
         UIViewController *subViewController;
         UINavigationController *navigationController;
-        
+        float 	counter;
+        bool	bSmooth;
+    
+        vector<Node> nodes;
+        ofCamera camera;
+
     public:
         void setup();
         void update();
