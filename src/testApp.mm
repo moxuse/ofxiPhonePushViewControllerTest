@@ -1,7 +1,5 @@
 #include "testApp.h"
 
-static dispatch_once_t onceToken;
-
 //--------------------------------------------------------------
 void testApp::setup(){
     ofxAccelerometer.setup();
@@ -10,7 +8,7 @@ void testApp::setup(){
 
     ofxiPhoneAlerts.addListener(this);
     
-    //ofxiPhoneGetOFWindow()->enableRetina();
+    ofxiPhoneGetOFWindow()->enableRetina();
     
 	ofBackground(255,255,255);
     
@@ -24,12 +22,24 @@ void testApp::setup(){
         newNode.position = ofVec3f( ofRandom(1000) - 500, ofRandom(1000) - 500, ofRandom(1000) - 500 );
         nodes.push_back( newNode);
     }
+    
+    
+    UIWindow * window = ofxiOSGetUIWindow();
+    
+    UIViewController *firstViewController = (UIViewController*)ofxiOSGetViewController();
+    
+    firstViewController.title = @"First View Controller";
+    
+    navigationController = [[UINavigationController alloc] initWithRootViewController:firstViewController];
+    
+    window.rootViewController = navigationController;
+    
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
 
-    if ([ofxiPhoneGetViewController().glView isAnimating]) {
+    if ([ofxiOSGetGLView() isAnimating]) {
         
         counter = counter + 0.25f;
     
@@ -40,28 +50,8 @@ void testApp::update(){
 //--------------------------------------------------------------
 void testApp::draw(){
     
-    dispatch_once(&onceToken, ^{
-        UIWindow * window = ofxiPhoneGetUIWindow();
-        
-        UIViewController *firstViewController = ofxiPhoneGetViewController();
-
-        firstViewController.title = @"First View Controller";
-        
-        window.rootViewController = subViewController; // 一時的にrootViewControllerを割り当てないとこける
-        
-        navigationController = [[UINavigationController alloc] initWithRootViewController:firstViewController];
-        
-        window.rootViewController = navigationController;
-        
-        dispatch_time_t delay = dispatch_time(DISPATCH_TIME_NOW, 0.1f * NSEC_PER_SEC);
-        dispatch_after(delay, dispatch_get_main_queue(), ^{
-            [[(ofxiPhoneViewController*)firstViewController glView] startAnimation]; // GLViewがstopしてしまうのでstartを少し遅れて呼ぶ
-        });
-        
-    });
     
-    if ([ofxiPhoneGetViewController().glView isAnimating]) {
-
+    if ([ofxiOSGetGLView() isAnimating]) {
 
         camera.begin();
         
